@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    Intentionally empty.
+
+    This file "caps" the MSBuild Directory.Build.props search so that this
+    self-contained example does NOT inherit the parent monorepo's
+    Directory.Build.props (which redirects build output into /dist and sets
+    repo-wide defaults). MSBuild imports only the *nearest* Directory.Build.props
+    found while walking up from a project, so having this here isolates the example.
+  -->
+</Project>

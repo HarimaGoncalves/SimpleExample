@@ -1,0 +1,64 @@
+{
+  // Tasks to build/run the backend and frontend.
+  // Run "run-fullstack" (Terminal > Run Task, or Ctrl+Shift+B) to start BOTH.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-backend",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/backend/Backend.csproj"],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run-backend",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/backend/Backend.csproj",
+        "--launch-profile",
+        "backend"
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "dotnet",
+        "pattern": "$msCompile",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": { "regexp": "(.*?)" },
+          "endsPattern": { "regexp": "Now listening on|Application started" }
+        }
+      },
+      "presentation": { "group": "fullstack", "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "run-frontend",
+      "type": "npm",
+      "script": "start",
+      "path": "frontend/",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": { "regexp": "(.*?)" },
+          "endsPattern": {
+            "regexp": "Watch mode enabled|Local:\\s+http|bundle generation complete|Compiled"
+          }
+        }
+      },
+      "presentation": { "group": "fullstack", "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "run-fullstack",
+      "dependsOn": ["run-backend", "run-frontend"],
+      "dependsOrder": "parallel",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
+}

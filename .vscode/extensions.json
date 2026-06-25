@@ -1,0 +1,8 @@
+{
+  // VS Code will suggest these when the folder is opened.
+  "recommendations": [
+    "ms-dotnettools.csdevkit",   // C# Dev Kit — build & debug the .NET backend
+    "ms-dotnettools.csharp",     // C# language support (dependency of Dev Kit)
+    "angular.ng-template"        // Angular Language Service — template intellisense
+  ]
+}

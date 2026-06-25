@@ -1,0 +1,50 @@
+{
+  // Press F5 and pick a configuration.
+  //  - "Full Stack" launches the C# API (with debugging) + Angular in Chrome.
+  //  - Requires the "C# Dev Kit" extension for backend debugging.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug backend (.NET API)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-backend",
+      "program": "${workspaceFolder}/backend/bin/Debug/net8.0/Backend.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/backend",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      }
+    },
+    {
+      "name": "Launch Chrome (frontend)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "run-frontend",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    },
+    {
+      "name": "Launch Edge (frontend)",
+      "type": "msedge",
+      "request": "launch",
+      "preLaunchTask": "run-frontend",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack (backend + frontend)",
+      "configurations": ["Debug backend (.NET API)", "Launch Chrome (frontend)"],
+      "stopAll": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    The parent monorepo enables Central Package Management (CPM), which forbids
+    Version="" attributes on <PackageReference> items. This self-contained example
+    keeps its versions inline in Backend.csproj for clarity, so we turn CPM off here.
+    NuGet uses the nearest Directory.Packages.props, so this overrides the parent's.
+  -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+</Project>
