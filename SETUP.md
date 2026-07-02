@@ -1,7 +1,7 @@
 # Setup & Run from Zero
 
 This guide takes a **brand-new machine with nothing installed** and gets the
-full-stack example (Angular + C# + SQLite) running locally. Works on
+full-stack example (React + C# + SQLite) running locally. Works on
 **Windows, macOS, and Linux**.
 
 > TL;DR once the prerequisites are installed:
@@ -141,7 +141,7 @@ Leave this terminal running.
 
 ---
 
-## 6. Run the frontend (Angular)
+## 6. Run the frontend (React)
 
 In a **second** terminal:
 
@@ -151,15 +151,15 @@ npm install      # first time only — downloads dependencies (a few minutes)
 npm start
 ```
 
-When you see `Local: http://localhost:4200/`, open
-**<http://localhost:4200>** in a browser.
+When you see `Local: http://localhost:3000/`, open
+**<http://localhost:3000>** in a browser.
 
 You should see the product list. Add a product, tick/untick stock, delete —
 each action calls the C# API, which reads/writes SQLite.
 
-> **How they connect:** `npm start` runs `ng serve --proxy-config proxy.conf.json`.
-> The proxy forwards every `/api/*` request from the Angular dev server (:4200)
-> to the backend (:5000), so there are no cross-origin issues in development.
+> **How they connect:** `npm start` starts the React development server.
+> Requests to `/api/*` are forwarded to the backend by `src/setupProxy.js`,
+> so there are no cross-origin issues in development.
 
 ---
 
@@ -183,12 +183,12 @@ starts on :5000.
 | Symptom | Cause / Fix |
 | --- | --- |
 | `dotnet: command not found` | SDK not installed or PATH not loaded — reinstall and **open a new terminal**. |
-| Angular install/serve fails with an **engine/Node version** error | Node is too old. Install Node 20 or 22 (`nvm use 20`). |
-| **Port 5000 already in use** | Stop the other process, or run `dotnet run --urls http://localhost:5050` **and** change `target` in `frontend/proxy.conf.json` to `http://localhost:5050`. |
-| **Port 4200 already in use** | `npm start -- --port 4300`, then open :4300. |
+| React install/serve fails with an **engine/Node version** error | Node is too old. Install Node 20 or 22 (`nvm use 20`). |
+| **Port 5000 already in use** | Stop the other process, or run `dotnet run --urls http://localhost:5050` **and** update the backend target in `src/setupProxy.js` to `http://localhost:5050`. |
+| **Port 3000 already in use** | Set `PORT=3001` then run `npm start`, or on Windows use `set PORT=3001 && npm start`. |
 | `npm install` fails behind a **corporate proxy** | Configure npm: `npm config set proxy http://user:pass@host:port` and the same for `https-proxy`. |
 | `dotnet restore` fails behind a **proxy/firewall** | The bundled `backend/nuget.config` uses nuget.org. Configure your proxy, or change it to your internal NuGet feed. |
-| `'ng' is not recognized as an internal or external command` | Run `npm install` inside `frontend` first. If PowerShell blocks `npm`, use `npm.cmd install` then `npm.cmd start` or `cmd /c npm install` / `cmd /c npm start`. |
+| `npm` is not recognized or `react-scripts` fails | Run `npm install` inside `frontend` first. If PowerShell blocks npm, use `npm.cmd install` then `npm.cmd start` or `cmd /c npm install` / `cmd /c npm start`. |
 | **PowerShell** blocks `ng` with a script-execution error | Use `npm.cmd start` or `cmd /c npm start`. To allow global `ng`, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. |
 | The page loads but shows **no products / network errors** | The backend isn't running. Start it (step 5) first, then refresh :4200. |
 | Want a **clean database** | Stop the API and delete `backend/products.db` (and `-shm`/`-wal` if present). It reseeds on next run. |
@@ -203,7 +203,7 @@ The `/api` **proxy is development-only** (`ng serve`). For a real deployment:
 **Build the frontend** to static files:
 ```bash
 cd frontend
-npm run build           # output in frontend/dist/frontend
+npm run build           # output in frontend/build
 ```
 
 **Publish the backend:**
@@ -236,7 +236,7 @@ dotnet run                       # http://localhost:5000  (Swagger at /swagger)
 # Frontend
 cd fullstack-example/frontend
 npm install                      # first time only
-npm start                        # http://localhost:4200
+npm start                        # http://localhost:3000
 
 # Reset the database
 #   delete backend/products.db, then `dotnet run` again
