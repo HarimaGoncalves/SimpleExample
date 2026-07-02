@@ -1,31 +1,55 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Product } from './product.model';
+
+const baseUrl = '/api/products';
 
 /**
  * Talks to the C# Web API. Requests go to /api/products and are forwarded to
- * the backend (http://localhost:5000) by the dev-server proxy (proxy.conf.json).
+ * the backend (http://localhost:5000) by the dev-server proxy.
  */
-@Injectable({ providedIn: 'root' })
-export class ProductService {
-  private readonly baseUrl = '/api/products';
+export const useProductService = () => {
+  const getAll = async (): Promise<Product[]> => {
+    const response = await fetch(baseUrl);
+    if (!response.ok) {
+      throw new Error('Failed to fetch products');
+    }
+    return response.json();
+  };
 
-  constructor(private http: HttpClient) {}
+  const create = async (product: Omit<Product, 'id'>): Promise<Product> => {
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create product');
+    }
+    return response.json();
+  };
 
-  getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
-  }
+  const update = async (id: number, product: Product): Promise<void> => {
+    const response = await fetch(`${baseUrl}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update product');
+    }
+  };
 
-  create(product: Omit<Product, 'id'>): Observable<Product> {
-    return this.http.post<Product>(this.baseUrl, product);
-  }
+  const delete_ = async (id: number): Promise<void> => {
+    const response = await fetch(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete product');
+    }
+  };
 
-  update(id: number, product: Product): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, product);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
-}
+  return { getAll, create, update, delete: delete_ };
+};

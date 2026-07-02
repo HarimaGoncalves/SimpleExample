@@ -6,12 +6,12 @@ full-stack example (Angular + C# + SQLite) running locally. Works on
 
 > TL;DR once the prerequisites are installed:
 > ```bash
-> # terminal 1 — backend (C# API)        # terminal 2 — frontend (Angular)
+> # terminal 1 — backend (C# API)        # terminal 2 — frontend (React)
 > cd fullstack-example/backend            cd fullstack-example/frontend
 > dotnet run                              npm install   # first time only
 >                                         npm start
 > ```
-> Then open <http://localhost:4200>.
+> Then open <http://localhost:3000>.
 
 ---
 
@@ -20,7 +20,7 @@ full-stack example (Angular + C# + SQLite) running locally. Works on
 | Tool | Why you need it | Minimum version |
 | --- | --- | --- |
 | **.NET SDK** | Builds & runs the C# backend | **8.0** |
-| **Node.js + npm** | Builds & runs the Angular frontend | **Node 18.19+ / 20.11+ / 22** (LTS 20 or 22 recommended) |
+| **Node.js + npm** | Builds & runs the React frontend | **Node 18.19+ / 20.11+ / 22** (LTS 20 or 22 recommended) |
 | **Git** | To clone the code (skip if you copy the folder) | any recent |
 | **An editor** (optional) | Visual Studio 2022 and/or VS Code | — |
 

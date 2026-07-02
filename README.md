@@ -1,10 +1,10 @@
-# Full-stack example — Angular + C# + SQL
+# Full-stack example — React + C# + SQL
 
 A minimal but complete CRUD app demonstrating the three classic layers:
 
 | Layer        | Technology                                   | Folder      |
 | ------------ | -------------------------------------------- | ----------- |
-| **Frontend** | Angular 18 (standalone components, signals)  | `frontend/` |
+| **Frontend** | React 18 (functional components, hooks)      | `frontend/` |
 | **Backend**  | ASP.NET Core 8 Web API (C#)                  | `backend/`  |
 | **Database** | SQLite via Entity Framework Core (free SQL)  | auto-created at `backend/products.db` |
 
@@ -13,8 +13,8 @@ add, toggle stock, and delete — each action calls the C# API, which reads/writ
 the SQLite database.
 
 ```
-Browser ──HTTP──> Angular dev server (:4200)
-                      │  /api/* proxied (proxy.conf.json)
+Browser ──HTTP──> React dev server (:3000)
+                      │  /api/* proxied (setupProxy.js)
                       ▼
                   ASP.NET Core API (:5000)  ──EF Core──>  SQLite (products.db)
 ```
@@ -28,11 +28,9 @@ Browser ──HTTP──> Angular dev server (:4200)
 > both apps, using the IDEs, and troubleshooting.
 
 - **.NET 8 SDK** — already installed on this machine (`dotnet --version` → 8.0.x). ✅
-- **Node.js 18+** (LTS 20 or 22 recommended) and npm, for the Angular app.
-  > ⚠️ The Node on this shell's PATH is **v14.18.1**, which is end-of-life and
-  > **too old** for Angular 18 (needs Node ^18.19 / ^20.11 / ^22). Use the newer
-  > Node you already have for the Nx monorepo (Nx 20 requires Node 18+), e.g. via
-  > `nvm use 20`, before running the frontend.
+- **Node.js 18+** (LTS 20 or 22 recommended) and npm, for the React app.
+  > Use Node 18.19+ / 20.11+ / 22 for React. If you have multiple Node versions,
+  > use the newer one (e.g. via `nvm use 20`).
 
 No database to install — SQLite is a single file created automatically on first run.
 
@@ -52,7 +50,7 @@ dotnet run
 
 On first run it creates `products.db` and seeds three rows.
 
-### 2. Frontend (Angular)
+### 2. Frontend (React)
 
 ```bash
 cd fullstack-example/frontend
@@ -60,10 +58,9 @@ npm install
 npm start
 ```
 
-Open <http://localhost:4200>. The `npm start` script runs
-`ng serve --proxy-config proxy.conf.json`, so calls to `/api/*` are forwarded to
-the backend on port 5000 (no CORS needed in dev — though CORS is also enabled in
-`Program.cs` as a fallback).
+Open <http://localhost:3000>. The `npm start` script runs `react-scripts start`,
+which uses `setupProxy.js` to forward `/api/*` calls to the backend on port 5000
+(no CORS needed in dev — though CORS is also enabled in `Program.cs` as a fallback).
 
 ---
 
@@ -90,8 +87,9 @@ curl -X POST http://localhost:5000/api/products \
 
 ## How the layers connect
 
-1. **Angular** (`product.service.ts`) calls `/api/products` with `HttpClient`.
-2. The **dev-server proxy** (`proxy.conf.json`) forwards `/api/*` to the C# API.
+1. **React** (`product.service.ts`, `App.tsx`) calls `/api/products` with the
+   Fetch API.
+2. The **dev-server proxy** (`setupProxy.js`) forwards `/api/*` to the C# API.
 3. **ASP.NET Core** (`ProductsController.cs`) handles the request and uses an
    injected `AppDbContext`.
 4. **EF Core** translates LINQ (`_db.Products.ToListAsync()`) into SQL and runs
